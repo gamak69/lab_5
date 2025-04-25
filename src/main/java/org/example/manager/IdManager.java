@@ -1,4 +1,4 @@
 package org.example.manager;
 
-public class InputDebugger {
+public class IdManager {
 }
