@@ -1,16 +1,31 @@
 package org.example.models;
 
-public enum Government {
+import java.io.Serializable;
+
+public enum Government implements Serializable {
     ANARCHY("Анархия"),
     DICTATORSHIP("Диктатура"),
     PUPPET_STATE("Марионеточное государство"),
     REPUBLIC("Республика"),
     ETHNOCRACY("Этнократия");
-    private String name;
+    private final String name;
     Government(String name){
         this.name = name;
     }
-    public String getName() {
-        return name;
+    public static Government getValues(String name){
+        for(Government government : values()){
+            if (government.name.equalsIgnoreCase(name) || government.name().equalsIgnoreCase(name)){
+                return government;
+            }
+        }
+        return null;
+    }
+    public static boolean getValuesBoolean(String name){
+        for(Government government : values()){
+            if (government.name.equalsIgnoreCase(name) || government.name().equalsIgnoreCase(name)){
+                return true;
+            }
+        }
+        return false;
     }
 }

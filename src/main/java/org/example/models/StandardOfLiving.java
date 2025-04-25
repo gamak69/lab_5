@@ -1,6 +1,10 @@
 package org.example.models;
 
-public enum StandardOfLiving {
+import lombok.Data;
+
+import java.io.Serializable;
+
+public enum StandardOfLiving implements Serializable {
     ULTRA_HIGH("Невообразимо высокий"),
     VERY_HIGH("Очень высокий"),
     NIGHTMARE("Кошмар");
@@ -10,10 +14,18 @@ public enum StandardOfLiving {
     }
     public static StandardOfLiving getValues(String name){
         for (StandardOfLiving e : values()){
-            if (e.name.equals(name)){
+            if (e.name.equalsIgnoreCase(name) || e.name().equalsIgnoreCase(name)){
                 return e;
             }
         }
         return null;
+    }
+    public static boolean getValuesBoolean(String name){
+        for (StandardOfLiving e : values()){
+            if (e.name.equalsIgnoreCase(name) || e.name().equalsIgnoreCase(name)){
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -1,9 +1,15 @@
 package org.example.models;
 
-public class Human implements Validatable{
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+@Data
+@NoArgsConstructor
+public class Human implements Validatable, Serializable {
     private Double height;
     public Human(Double height){
-        if (height == 0){
+        if (height <= 0){
             throw new IllegalArgumentException();
         }
         this.height = height;
@@ -11,6 +17,6 @@ public class Human implements Validatable{
 
     @Override
     public boolean validate() {
-        return height != 0;
+        return height > 0;
     }
 }

@@ -1,6 +1,12 @@
 package org.example.models;
 
-public class Coordinates implements Validatable{
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+@Data
+@NoArgsConstructor
+public class Coordinates implements Validatable, Serializable {
     private Long x;
     private Double y;
     public Coordinates(Long x, Double y){

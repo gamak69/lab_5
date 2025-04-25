@@ -1,0 +1,4 @@
+show
+help
+info
+execute script.txt

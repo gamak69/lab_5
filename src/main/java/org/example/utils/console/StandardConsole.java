@@ -39,6 +39,11 @@ public class StandardConsole implements Console {
     }
 
     @Override
+    public void printInvalid(Object obj) {
+        System.out.print(RED + obj);
+    }
+
+    @Override
     public String readln() {
         try {
             return reader.readLine();

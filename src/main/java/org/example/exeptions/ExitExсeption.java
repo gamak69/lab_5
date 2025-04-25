@@ -1,4 +1,5 @@
 package org.example.exeptions;
 
-public class ExitExeption extends Exception{
+public class ExitExсeption extends Exception{
 }
+
