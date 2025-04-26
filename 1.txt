@@ -1,4 +1,2 @@
-show
-execute test.txt
-help
-show
+save
+exit

@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class CsvDataStorage implements DataStorage<City> {
@@ -82,44 +83,132 @@ public class CsvDataStorage implements DataStorage<City> {
 
     private City mapRowToCity(Map<String, String> row) throws IOException {
         City city = new City();
-        city.setId(Long.parseLong(row.get("id")));
-        city.setName(row.get("name"));
+        List<String> errors = new ArrayList<>();
 
-        Coordinates coords = new Coordinates(
-                Long.parseLong(row.get("x")),
-                Double.parseDouble(row.get("y"))
-        );
-
-        city.setCoordinates(coords);
-        city.setCreationDate(LocalDateTime.parse(row.get("creationDate"))); // TODO здесь хуйня может быть
-        city.setArea(Long.valueOf(row.get("area")));
-        city.setPopulation(Long.valueOf(row.get("population")));
-        city.setMetersAboveSeaLevel(Float.valueOf(row.get("metersAboveSeaLevel")));
-
-        //Если establishmentDate может быть null или пустым — обработай это
+        // ID
         try {
-            Date establishmentDate = sdf.parse(row.get("establishmentDate"));
-            city.setEstablishmentDate(establishmentDate);
-        } catch (ParseException e) {
-            throw new IOException("Failed to parse establishmentDate: " + row.get("establishmentDate"), e);
+            if (Long.parseLong(row.get("id")) < 0){
+                errors.add("ID должно быть > 0");
+            }
+            city.setId(Long.parseLong(row.get("id")));
+        } catch (NumberFormatException | NullPointerException e) {
+            errors.add("Некорректный ID: " + row.get("id"));
         }
 
-        // Enum'ы government и standardOfLiving — проверяй на null или пустую строку
-        String governmentStr = row.get("government");
-        if (governmentStr != null && !governmentStr.isEmpty()) {
-            city.setGovernment(Government.valueOf(governmentStr));
+        // Name
+        if (row.get("name") == null || row.get("name").isEmpty()) {
+            errors.add("Отсутствует название города");
         } else {
-            city.setGovernment(null);
+            city.setName(row.get("name"));
         }
 
-        String standardOfLivingStr = row.get("standardOfLiving");
-        if (standardOfLivingStr != null && !standardOfLivingStr.isEmpty()) {
-            city.setStandardOfLiving(StandardOfLiving.valueOf(standardOfLivingStr));
-        } else {
-            city.setStandardOfLiving(null);
+        // Coordinates
+        Long x = null;
+        Double y = null;
+
+        try {
+            x = Long.parseLong(row.get("x"));
+        } catch (NumberFormatException | NullPointerException e) {
+            errors.add("Некорректная координата X: " + row.get("x"));
         }
 
-        city.setGovernor(new Human(Double.valueOf(row.get("governor"))));
+        try {
+            y = Double.parseDouble(row.get("y"));
+            if (y <= -659) {
+                errors.add("Координата Y должна быть > -659");
+            }
+        } catch (NumberFormatException | NullPointerException e) {
+            errors.add("Некорректная координата Y: " + row.get("y"));
+        }
+
+        if (x != null && y != null) {
+            try {
+                city.setCoordinates(new Coordinates(x, y));
+            } catch (IllegalArgumentException e) {
+                errors.add(e.getMessage());
+            }
+        }
+
+        // Creation Date
+        try {
+            city.setCreationDate(LocalDateTime.parse(row.get("creationDate")));
+        } catch (DateTimeParseException | NullPointerException e) {
+            errors.add("Некорректная дата создания: " + row.get("creationDate"));
+        }
+
+        // Area
+        try {
+            long area = Long.parseLong(row.get("area"));
+            if (area <= 0) {
+                errors.add("Площадь должна быть > 0");
+            }
+            city.setArea(area);
+        } catch (NumberFormatException | NullPointerException e) {
+            errors.add("Некорректная площадь: " + row.get("area"));
+        }
+
+        // Population
+        try {
+            long population = Long.parseLong(row.get("population"));
+            if (population <= 0) {
+                errors.add("Население должно быть > 0");
+            }
+            city.setPopulation(population);
+        } catch (NumberFormatException | NullPointerException e) {
+            errors.add("Некорректное население: " + row.get("population"));
+        }
+
+        // Meters Above Sea Level
+        try {
+            city.setMetersAboveSeaLevel(Float.parseFloat(row.get("metersAboveSeaLevel")));
+        } catch (NumberFormatException | NullPointerException e) {
+            errors.add("Некорректная высота над уровнем моря: " + row.get("metersAboveSeaLevel"));
+        }
+
+        // Establishment Date
+        try {
+            if (row.get("establishmentDate") != null || !row.get("establishmentDate").isEmpty()) {
+                Date date = sdf.parse(row.get("establishmentDate"));
+                city.setEstablishmentDate(date);
+            }
+        } catch (ParseException | NullPointerException | IllegalArgumentException e) {
+            errors.add("Некорректная дата основания: " + row.get("establishmentDate"));
+        }
+
+        // Government
+        try {
+            if (row.get("government") != null || !row.get("government").isEmpty()) {
+                city.setGovernment(Government.valueOf(row.get("government")));
+            }
+        } catch (IllegalArgumentException e) {
+            errors.add("Недопустимое значение Government: " + row.get("government"));
+        }
+
+        // Standard of Living
+        try {
+            if (row.get("standardOfLiving") != null || !row.get("standardOfLiving").isEmpty()) {
+                city.setStandardOfLiving(StandardOfLiving.valueOf(row.get("standardOfLiving")));
+            }
+        } catch (IllegalArgumentException e) {
+            errors.add("Недопустимое значение StandardOfLiving: " + row.get("standardOfLiving"));
+        }
+
+        // Governor
+        try {
+            if (row.get("governor") != null || !row.get("governor").isEmpty()) {
+                double height = Double.parseDouble(row.get("governor"));
+                if (height <= 0d) {
+                    errors.add("Рост губернатора должен быть > 0");
+                }
+                city.setGovernor(new Human(height));
+            }
+        } catch (NumberFormatException | NullPointerException e) {
+            errors.add("Некорректный рост губернатора: " + row.get("governor"));
+        }
+
+        if (!errors.isEmpty()) {
+            throw new IOException(String.join("; ", errors));
+        }
 
         return city;
     }

@@ -1,4 +1,12 @@
-show
-help
-info
-execute script.txt
+add
+qwe
+3
+3
+3
+3
+3
+1-1-1
+anarchy
+NIGHTMARE
+243234324
+execute 1.txt

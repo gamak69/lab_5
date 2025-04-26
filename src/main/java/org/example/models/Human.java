@@ -9,9 +9,6 @@ import java.io.Serializable;
 public class Human implements Validatable, Serializable {
     private Double height;
     public Human(Double height){
-        if (height <= 0){
-            throw new IllegalArgumentException();
-        }
         this.height = height;
     }
 

@@ -1,1 +1,2 @@
-history
+show
+execute test.txt

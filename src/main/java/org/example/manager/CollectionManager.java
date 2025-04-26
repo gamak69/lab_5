@@ -29,7 +29,7 @@ public class CollectionManager implements Iterable<City>{
             }
         }
         catch (IOException e){
-            System.err.println("Хуй" + e.getMessage());
+            System.err.println("Хуй то там: " + e.getMessage());
             System.exit(1);
         }
         return instance;
