@@ -1,0 +1,4 @@
+show
+execute test.txt
+help
+show
