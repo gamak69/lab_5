@@ -29,7 +29,9 @@ public class City implements Comparable<City>, Serializable, Validatable {
     private StandardOfLiving standardOfLiving;          //Поле не может быть null
     @NonNull
     private Human governor;                             //Поле не может быть null
+
     //"Mon Nov 11 00:00:00 MSK 26644"
+
     @Override
     public boolean validate(){
         if(name.isEmpty()) return false;

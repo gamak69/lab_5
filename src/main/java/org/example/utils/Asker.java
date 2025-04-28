@@ -74,7 +74,7 @@ public class Asker {
         } while (x == null);
         Double y = null;
         do {
-            console.print("Введите координаты \"y\" города: ");
+            console.print("Введите координаты \"y\" города (значение поля должно быть больше -659): ");
             String input = console.readln();
             if (input == null){
                 throw new ExitExсeption();
@@ -100,7 +100,7 @@ public class Asker {
     private Long askArea(String name) throws ExitExсeption{
         Long area = null;
         do{
-            console.print("Введите площадь города: ");
+            console.print("Введите площадь города (значение поля должно быть больше 0): ");
             String input = console.readln();
             if (input == null){
                 throw new ExitExсeption();
@@ -126,7 +126,7 @@ public class Asker {
     private Long askPopulation(String name) throws ExitExсeption{
         Long population = null;
         do {
-            console.print("Введите численность населения города: ");
+            console.print("Введите численность населения города (значение поля должно быть больше 0): ");
             String input = console.readln();
             if (input == null){
                 throw new ExitExсeption();
@@ -165,10 +165,6 @@ public class Asker {
             if (!input.isEmpty()){
                 try {
                     meretsAbolveLevle = Float.parseFloat(input);
-                    if (meretsAbolveLevle <= 0){
-                        meretsAbolveLevle = null;
-                        console.printerr("Данное значение хуйня какая-то, переделывайте");
-                    }
                 } catch (NumberFormatException e){
                     console.printerr("Данное значение хуйня какая-то, переделывайте");
                 }

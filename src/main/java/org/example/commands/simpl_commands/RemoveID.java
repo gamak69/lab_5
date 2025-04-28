@@ -18,10 +18,10 @@ public class RemoveID extends Command {
 
     @Override
     public ExecStatus execute(City city, String... args){
-        if (city != null){
-            throw new IllegalArgumentException(String.format("Команде '%s' переданы никчемные, обосанные данные, фрик ты%n", getName()));
+        if (!validate(args)){
+            return new ExecStatus(false, "Анлак");
         }
-        if (collectionManager.removeById(Long.parseLong(args[1]))){
+        if (collectionManager.removeById(Long.parseLong(args[0]))){
             return new ExecStatus("Элемент успешно удален");
         }
         return new ExecStatus(false, "Элемент не удален");

@@ -22,12 +22,10 @@ public class AddIfMin extends Command {
             collectionManager.add(city);
             return new ExecStatus("Коллекция добавлена т.к изначально была пустая");
         }
-        City city_min = collectionManager.getMin();
-        if (city.compareTo(city_min) < 0){
-            collectionManager.add(city);
+        if (collectionManager.addIfMin(city)){
             return new ExecStatus("Все заебок, город ваще лоховской и добавлен так как обосаннее всех");
         }
-        else{
+        else {
             return new ExecStatus("Город оказался не лоховским, поэтому не добавлен (он больше минимального)");
         }
     }

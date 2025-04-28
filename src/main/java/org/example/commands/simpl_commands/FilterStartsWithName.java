@@ -28,8 +28,6 @@ public class FilterStartsWithName extends Command {
         StringBuilder sb = new StringBuilder();
         String HEADER_COLOR = "\u001B[34m"; // Синий цвет заголовка
         String RESET        = "\u001B[0m";  // Сброс цвета
-        //String RED          = "\u001B[31m"; // Красный цвет
-        //String ORANGE       = "\u001B[38;5;214m"; // ANSI 256-цветная палитра, код 214 (оранжевый)
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         sb.append("┌───────────────────────────────────────────────────────────────────────┐\n");
         sb.append(String.format("│ " + HEADER_COLOR + "%-69s" + RESET + " │%n", String.format("Элементы, которые начинаются на '%s'", start_name)));

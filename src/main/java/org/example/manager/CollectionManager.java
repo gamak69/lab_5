@@ -59,7 +59,17 @@ public class CollectionManager implements Iterable<City>{
     public boolean removeById(Long id){
         return collection.removeIf(x -> x.getId() == id);
     }
-
+//    public boolean removeById(long id) {
+//        Iterator<City> iterator = collection.iterator();
+//        boolean removed = false;
+//        while (iterator.hasNext()) {
+//            if (iterator.next().getId() == id) {
+//                iterator.remove();
+//                removed = true;
+//            }
+//        }
+//        return removed;
+//    }
 
     private City getID(Long id){
         for (City city : collection){
@@ -77,6 +87,14 @@ public class CollectionManager implements Iterable<City>{
 
     public City getMin(){
         return Collections.min(collection);
+    }
+
+    public boolean addIfMin(City city) {
+        if (collection.isEmpty()) {
+            return collection.add(city);
+        }
+        City currentMin = getMin();
+        return (city.compareTo(currentMin) < 0) && collection.add(city);
     }
 
     public void save() throws IOException{
